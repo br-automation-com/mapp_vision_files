@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 def on_currentIndexChanged(idx):
     if idx == 0:
         # Code Reader
+        txt_vf.setPlaceholderText('VfCodeReader')
         for i in range(len(chk_in)):
             if mp_in_cr[i]:
                 chk_in[i].setVisible(True)
@@ -17,6 +18,7 @@ def on_currentIndexChanged(idx):
                 chk_out[i].setVisible(False)        
     if idx == 1:
         # Blob
+        txt_vf.setPlaceholderText('VfBlob')
         for i in range(len(chk_in)):
             if mp_in_blob[i]:
                 chk_in[i].setVisible(True)
@@ -29,6 +31,7 @@ def on_currentIndexChanged(idx):
                 chk_out[i].setVisible(False)  
     if idx == 2:
         # Matching
+        txt_vf.setPlaceholderText('VfMatching')
         for i in range(len(chk_in)):
             if mp_in_match[i]:
                 chk_in[i].setVisible(True)
@@ -41,6 +44,7 @@ def on_currentIndexChanged(idx):
                 chk_out[i].setVisible(False)  
     if idx == 3:
         # OCR
+        txt_vf.setPlaceholderText('VfOcr')
         for i in range(len(chk_in)):
             if mp_in_ocr[i]:
                 chk_in[i].setVisible(True)
@@ -53,6 +57,7 @@ def on_currentIndexChanged(idx):
                 chk_out[i].setVisible(False)  
     if idx == 4:
         # Measurement
+        txt_vf.setPlaceholderText('VfMeasurement')
         for i in range(len(chk_in)):
             if mp_in_meas[i]:
                 chk_in[i].setVisible(True)
@@ -96,6 +101,9 @@ if __name__ == "__main__":
     cbx_vf.addItem('Measurement')
     cbx_vf.currentIndexChanged.connect(on_currentIndexChanged)
 
+    txt_vf = QLineEdit()
+    txt_vf.setPlaceholderText('VfCodeReader')
+    
     # Input widgets
     font_bold = QFont()
     font_bold.setBold(True)
@@ -178,6 +186,7 @@ if __name__ == "__main__":
     # Layout settings
     layout = QFormLayout() 
     layout.addRow(QLabel('Select your Vision function: '), cbx_vf)
+    layout.addRow(QLabel('Instance name: '), txt_vf)
     layout.addRow(QLabel('__________________________________________________________________________________'))
 
     vbox_in = QVBoxLayout()
