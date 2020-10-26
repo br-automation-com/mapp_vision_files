@@ -4,21 +4,48 @@ from PyQt5.QtWidgets import *
 def on_currentIndexChanged(idx):
     if idx == 0:
         # Code Reader
-        chk_cr.setEnabled(False)
+        for i in range(len(chk_in)):
+            if mp_in_cr[i]:
+                chk_in[i].setVisible(True)
+            else:
+                chk_in[i].setVisible(False)
     if idx == 1:
         # Blob
-        chk_blob.setEnabled(False)   
+        for i in range(len(chk_in)):
+            if mp_in_blob[i]:
+                chk_in[i].setVisible(True)
+            else:
+                chk_in[i].setVisible(False)
     if idx == 2:
         # Matching
-        chk_match.setEnabled(False)
+        for i in range(len(chk_in)):
+            if mp_in_match[i]:
+                chk_in[i].setVisible(True)
+            else:
+                chk_in[i].setVisible(False)
+    if idx == 3:
+        # Matching
+        for i in range(len(chk_in)):
+            if mp_in_ocr[i]:
+                chk_in[i].setVisible(True)
+            else:
+                chk_in[i].setVisible(False)
+    if idx == 4:
+        # Matching
+        for i in range(len(chk_in)):
+            if mp_in_meas[i]:
+                chk_in[i].setVisible(True)
+            else:
+                chk_in[i].setVisible(False)
+
 
 def chk_stateChanged():
-    if (chk_in_SelectAll.isChecked()):
-        chk_in[0].setChecked(True)
-        chk_in[1].setChecked(True)
+    if chk_in_SelectAll.isChecked():
+        for i in range(len(chk_in)):
+            chk_in[i].setChecked(True)
     else:
-        chk_in[0].setChecked(False)
-        chk_in[1].setChecked(False)
+        for i in range(len(chk_in)):
+            chk_in[i].setChecked(False)
 
 if __name__ == "__main__":
     app = QApplication([])
@@ -33,24 +60,39 @@ if __name__ == "__main__":
     cbx_vf.currentIndexChanged.connect(on_currentIndexChanged)
 
     chk_in_SelectAll = QCheckBox('Select all')
-    
-    chk_in = [QCheckBox('Enable'), QCheckBox('NumSearchMax')]
-    chk_in_Timeout = QCheckBox('Timeout')
-    chk_in_SymbolType = QCheckBox('SymbolType')
-    chk_in_ParameterMode = QCheckBox('ParameterMode')
-    chk_in_CodeGrading = QCheckBox('CodeGrading')
-    chk_in_ParameterOptimization = QCheckBox('ParameterOptimization')
-    chk_in_EnableRobustness = QCheckBox('EnableRobustness')
-    chk_in_TestExecute = QCheckBox('TestExecute')
-    chk_in_Alignment = QCheckBox('Alignment')
-    chk_in_OffsetROIX = QCheckBox('OffsetROIX')
-    chk_in_OffsetROIY = QCheckBox('OffsetROIY')
-    chk_in_OffsetROIOrientation = QCheckBox('OffsetROIOrientation')
-    chk_in_OffsetROIRotCenterX = QCheckBox('OffsetROIRotCenterX')
-    chk_in_OffsetROIRotCenterY = QCheckBox('OffsetROIRotCenterY')
 
-    # TBC
-    chk_in_SelectAll.stateChanged.connect(chk_stateChanged) 
+    chk_in = [  QCheckBox('Enable'),
+                QCheckBox('NumSearchMax'),
+                QCheckBox('ParameterMode'),
+                QCheckBox('Timeout'),
+                QCheckBox('Alignment'),
+                QCheckBox('RegionFeatures'),
+                QCheckBox('EnhancedBlobInformation'),
+                QCheckBox('MinScore'),
+                QCheckBox('MaxOverlap'),
+                QCheckBox('Grading'),
+                QCheckBox('ParameterOptimization'),
+                QCheckBox('SymbolType'),
+                QCheckBox('EnableRobustness'),
+                QCheckBox('CodeGrading'),
+                QCheckBox('OffsetROIX'),
+                QCheckBox('OffsetROIY'),
+                QCheckBox('OffsetROIOrientation'),
+                QCheckBox('OffsetROIRotCenterX'),
+                QCheckBox('OffsetROIRotCenterY')
+            ]
+    mp_in_cr = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    mp_in_blob = [1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+    mp_in_match = [1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+    mp_in_ocr = [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+    mp_in_meas = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+
+    # Set initial inputs visibility
+    for i in range(len(chk_in)):
+        if mp_in_cr[i] == 0:
+            chk_in[i].setVisible(False)
+
+    chk_in_SelectAll.stateChanged.connect(chk_stateChanged)
     
     layout = QGridLayout()
     layout.addWidget(QLabel('Select your Vision function: '), 0, 0)
@@ -60,23 +102,11 @@ if __name__ == "__main__":
     layout.addWidget(QLabel('Inputs'), 2, 0)
     layout.addWidget(chk_in_SelectAll, 3, 0)
     layout.addWidget(QLabel('_____________________________________________'), 4, 0)
+    
     POS_CHK_IN_1 = 5
     POS_CHK_IN_2 = 0
-    layout.addWidget(chk_in[0], POS_CHK_IN_1, POS_CHK_IN_2)
-    layout.addWidget(chk_in[1], POS_CHK_IN_1 + 1, POS_CHK_IN_2)
-    layout.addWidget(chk_in_Timeout, POS_CHK_IN_1 + 2, POS_CHK_IN_2)
-    layout.addWidget(chk_in_SymbolType, POS_CHK_IN_1 + 3, POS_CHK_IN_2)
-    layout.addWidget(chk_in_ParameterMode, POS_CHK_IN_1 + 4, POS_CHK_IN_2)
-    layout.addWidget(chk_in_CodeGrading, POS_CHK_IN_1 + 5, POS_CHK_IN_2)
-    layout.addWidget(chk_in_ParameterOptimization, POS_CHK_IN_1 + 6, POS_CHK_IN_2)
-    layout.addWidget(chk_in_EnableRobustness, POS_CHK_IN_1 + 7, POS_CHK_IN_2)
-    layout.addWidget(chk_in_TestExecute, POS_CHK_IN_1 + 8, POS_CHK_IN_2)
-    layout.addWidget(chk_in_Alignment, POS_CHK_IN_1 + 9, POS_CHK_IN_2)
-    layout.addWidget(chk_in_OffsetROIX, POS_CHK_IN_1 + 10, POS_CHK_IN_2)
-    layout.addWidget(chk_in_OffsetROIY, POS_CHK_IN_1 + 11, POS_CHK_IN_2)
-    layout.addWidget(chk_in_OffsetROIOrientation, POS_CHK_IN_1 + 12, POS_CHK_IN_2)
-    layout.addWidget(chk_in_OffsetROIRotCenterX, POS_CHK_IN_1 + 13, POS_CHK_IN_2)
-    layout.addWidget(chk_in_OffsetROIRotCenterY, POS_CHK_IN_1 + 14, POS_CHK_IN_2)
+    for i in range(len(chk_in)):
+        layout.addWidget(chk_in[i], POS_CHK_IN_1 + i, POS_CHK_IN_2)
 
     widget = QWidget()
     widget.setLayout(layout)
