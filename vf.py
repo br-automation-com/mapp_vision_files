@@ -1,4 +1,3 @@
-
 import sys, os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -47,16 +46,69 @@ def btn_genFile():
     f_handle.write('\t\t<Group ID=\"VisionFunctionSet\">\n')
     f_handle.write('\t\t\t<Group ID=\"VfInstance[1]\">\n')
     f_handle.write('\t\t\t\t<Property ID=\"VfName\" Value=\"')
-    f_handle.write(f_name)
+    f_handle.write(txt_vf.text())
     f_handle.write('\" />\n')
-    f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />')
+    f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />\n')
+    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"vf-datacode\">\n')
+    f_handle.write('\t\t\t\t\t<Group ID=\"VfConstants\">\n')
+    f_handle.write('\t\t\t\t\t\t<Property ID=\"MaxStringSize\" Value=\"254\" />\n')
+    f_handle.write('\t\t\t\t\t\t<Property ID=\"NumResultsMax\" Value=\"1\" />\n')
+    f_handle.write('\t\t\t\t\t</Group>\n')
+    f_handle.write('\t\t\t\t\t<Group ID=\"VfWirings\">\n')
 
-    #     <Selector ID="VfType" Value="vf-datacode">
-    #       <Group ID="VfConstants">
-    #         <Property ID="MaxStringSize" Value="254" />
-    #         <Property ID="NumResultsMax" Value="1" />
-    #       </Group>
+    # Inputs
+    tab_6 = '\t\t\t\t\t\t'
+    f_handle.write(tab_6 + '<Group ID=\"Image\">\n')
+    f_handle.write(tab_6 + '\t<Selector ID=\"SourceType\" Value=\"ImageAcquisition\">\n')
+    f_handle.write(tab_6 + '\t\t<Property ID=\"IaParameter\" Value=\"Image01\" />\n')
+    f_handle.write(tab_6 + '\t</Selector>\n')
+    f_handle.write(tab_6 + '</Group>\n')
+    k = 0
+    for j in range(len(mp_in)):
+        if mp_in[j] & chk_in[j].isChecked():
+            f_handle.write(tab_6 + '<Group ID=\"')
+            f_handle.write(chk_in[j].text())
+            f_handle.write('\">\n')
+            f_handle.write(tab_6 + '\t<Selector ID=\"SourceType\" Value=\"Input\">\n')
+            f_handle.write(tab_6 + '\t\t<Property ID=\"IoParameter\" Value=\"')
+            f_handle.write(chk_in[j].text())
+            f_handle.write('\" />\n')
+            f_handle.write(tab_6 + '\t</Selector>\n')
+            f_handle.write(tab_6 + '</Group>\n')
+            k = k + 1
+    f_handle.write('\t\t\t\t\t</Group>\n')
+    f_handle.write('\t\t\t\t</Selector>\n')
+    f_handle.write('\t\t\t\t<Group ID=\"Position\">\n')
+    f_handle.write('\t\t\t\t\t<Property ID=\"X\" Value=\"1\" />\n')
+    f_handle.write('\t\t\t\t\t<Property ID=\"Y\" Value=\"0\" />\n')
+    f_handle.write('\t\t\t\t</Group>\n')
+    f_handle.write('\t\t\t</Group>\n')
+    f_handle.write('\t\t</Group>\n')
 
+    # Outputs
+    f_handle.write('\t\t<Group ID=\"ImgProcessingOutputs\">\n')
+    k = 0
+    for j in range(len(mp_out)):
+        if mp_out[j] & chk_out[j].isChecked():
+            f_handle.write('\t\t\t<Group ID=\"Output[')
+            f_handle.write(str(k))        
+            f_handle.write(']\">\n')
+            f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"')
+            f_handle.write(chk_out[j].text())
+            f_handle.write('\" />\n')
+            f_handle.write('\t\t\t\t<Group ID=\"VpOutputWire\">\n')
+            f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"')
+            f_handle.write(txt_vf.text())
+            f_handle.write('\" />\n')
+            f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"')
+            f_handle.write(chk_out[j].text())
+            f_handle.write('\" />\n')
+            f_handle.write('\t\t\t\t</Group>\n')
+            f_handle.write('\t\t\t</Group>\n')
+            k = k + 1   
+    f_handle.write('\t\t</Group>\n')
+    f_handle.write('\t</Element>\n')
+    f_handle.write('</Configuration>\n')
     f_handle.close()
 
 def cbx_currentIndexChanged(idx):
@@ -211,7 +263,7 @@ if __name__ == "__main__":
 
     chk_out = [ QCheckBox('NumResults'),
                 QCheckBox('DecodedData'),
-                QCheckBox('SymbolType'),
+                QCheckBox('SymbolTypeOut'), # BUG
                 QCheckBox('OCRData'),
                 QCheckBox('GradingValue'),
                 QCheckBox('Clipped'),
@@ -221,7 +273,7 @@ if __name__ == "__main__":
                 QCheckBox('PositionY'),
                 QCheckBox('Orientation'),
                 QCheckBox('Result'),
-                QCheckBox('FunctionProccessingTime'),
+                QCheckBox('FunctionProcessingTime'),
                 QCheckBox('EnhancedGradingInformation'),
                 QCheckBox('MeanGrayValue'),
                 QCheckBox('Length'),
@@ -287,6 +339,7 @@ if __name__ == "__main__":
     
 
     # Set initial visibility
+    chk_in_SelectAll.setChecked(True)
     for i in range(len(chk_in)):
         if mp_in_cr[i] == 0:
             chk_in[i].setVisible(False)
