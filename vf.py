@@ -95,6 +95,8 @@ def btn_genFile():
             f_handle.write(']\">\n')
             f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"')
             f_handle.write(chk_out[j].text())
+            if j == 2:
+                f_handle.write('Out')
             f_handle.write('\" />\n')
             f_handle.write('\t\t\t\t<Group ID=\"VpOutputWire\">\n')
             f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"')
@@ -263,7 +265,7 @@ if __name__ == "__main__":
 
     chk_out = [ QCheckBox('NumResults'),
                 QCheckBox('DecodedData'),
-                QCheckBox('SymbolTypeOut'), # BUG
+                QCheckBox('SymbolType'), # BUG
                 QCheckBox('OCRData'),
                 QCheckBox('GradingValue'),
                 QCheckBox('Clipped'),
