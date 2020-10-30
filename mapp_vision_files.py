@@ -1,9 +1,12 @@
-import sys, os
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+""" This app generates mapp Vision configuration files (.visionapplication and .visioncomponent) """
 
-def btn_genFile():
+import sys
+import os
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QLineEdit, QCheckBox, QPushButton, QMessageBox, QFormLayout, QVBoxLayout, QHBoxLayout, QFileDialog
+from PyQt5.QtGui import QFont
 
+def btn_gen_file():
+    """ Generate files button pressed """
     # Copy VF index-related settings
     if cbx_vf.currentIndex() == 0:
         vf_string = 'vf-datacode'
@@ -96,7 +99,7 @@ def btn_genFile():
                 f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"' + chk_out[j].text() + '\" />\n')
                 f_handle.write('\t\t\t\t</Group>\n')
                 f_handle.write('\t\t\t</Group>\n')
-                k = k + 1   
+                k = k + 1
         f_handle.write('\t\t</Group>\n')
         f_handle.write('\t</Element>\n')
         f_handle.write('</Configuration>\n')
@@ -142,92 +145,93 @@ def btn_genFile():
     box_fin.setVisible(True)
     widget.activateWindow()
 
-def cbx_currentIndexChanged(idx):
+def cbx_curr_idx_changed(idx):
+    """ VF combobox selected index changed """
     if idx == 0:
         # Code Reader
         txt_vf.setText('VfCodeReader')
-        for i in range(len(chk_in)):
-            if mp_in_cr[i]:
-                chk_in[i].setVisible(True)
+        for j in range(len(chk_in)):
+            if mp_in_cr[j]:
+                chk_in[j].setVisible(True)
             else:
-                chk_in[i].setVisible(False)
-        for i in range(len(chk_out)):
-            if mp_out_cr[i]:
-                chk_out[i].setVisible(True)
+                chk_in[j].setVisible(False)
+        for j in range(len(chk_out)):
+            if mp_out_cr[j]:
+                chk_out[j].setVisible(True)
             else:
-                chk_out[i].setVisible(False)        
+                chk_out[j].setVisible(False)
     if idx == 1:
         # Blob
         txt_vf.setText('VfBlob')
-        for i in range(len(chk_in)):
-            if mp_in_blob[i]:
-                chk_in[i].setVisible(True)
+        for j in range(len(chk_in)):
+            if mp_in_blob[j]:
+                chk_in[j].setVisible(True)
             else:
-                chk_in[i].setVisible(False)
-        for i in range(len(chk_out)):
-            if mp_out_blob[i]:
-                chk_out[i].setVisible(True)
+                chk_in[j].setVisible(False)
+        for j in range(len(chk_out)):
+            if mp_out_blob[j]:
+                chk_out[j].setVisible(True)
             else:
-                chk_out[i].setVisible(False)  
+                chk_out[j].setVisible(False)
     if idx == 2:
         # Matching
         txt_vf.setText('VfMatching')
-        for i in range(len(chk_in)):
-            if mp_in_match[i]:
-                chk_in[i].setVisible(True)
+        for j in range(len(chk_in)):
+            if mp_in_match[j]:
+                chk_in[j].setVisible(True)
             else:
-                chk_in[i].setVisible(False)
-        for i in range(len(chk_out)):
-            if mp_out_match[i]:
-                chk_out[i].setVisible(True)
+                chk_in[j].setVisible(False)
+        for j in range(len(chk_out)):
+            if mp_out_match[j]:
+                chk_out[j].setVisible(True)
             else:
-                chk_out[i].setVisible(False)  
+                chk_out[j].setVisible(False)
     if idx == 3:
         # OCR
         txt_vf.setText('VfOcr')
-        for i in range(len(chk_in)):
-            if mp_in_ocr[i]:
-                chk_in[i].setVisible(True)
+        for j in range(len(chk_in)):
+            if mp_in_ocr[j]:
+                chk_in[j].setVisible(True)
             else:
-                chk_in[i].setVisible(False)
-        for i in range(len(chk_out)):
-            if mp_out_ocr[i]:
-                chk_out[i].setVisible(True)
+                chk_in[j].setVisible(False)
+        for j in range(len(chk_out)):
+            if mp_out_ocr[j]:
+                chk_out[j].setVisible(True)
             else:
-                chk_out[i].setVisible(False)  
+                chk_out[j].setVisible(False)
     if idx == 4:
         # Measurement
         txt_vf.setText('VfMeasurement')
-        for i in range(len(chk_in)):
-            if mp_in_meas[i]:
-                chk_in[i].setVisible(True)
+        for j in range(len(chk_in)):
+            if mp_in_meas[j]:
+                chk_in[j].setVisible(True)
             else:
-                chk_in[i].setVisible(False)
-        for i in range(len(chk_out)):
-            if mp_out_meas[i]:
-                chk_out[i].setVisible(True)
+                chk_in[j].setVisible(False)
+        for j in range(len(chk_out)):
+            if mp_out_meas[j]:
+                chk_out[j].setVisible(True)
             else:
-                chk_out[i].setVisible(False)  
+                chk_out[j].setVisible(False)
 
 
-def chk_in_stateChanged():
-    # Select all inputs checkbox
+def chk_in_state_changed():
+    """ Select all inputs checkbox """
     if chk_in_SelectAll.isChecked():
-        for i in range(len(chk_in)):
-            chk_in[i].setChecked(True)
+        for j in range(len(chk_in)):
+            chk_in[j].setChecked(True)
     else:
-        for i in range(len(chk_in)):
-            chk_in[i].setChecked(False)
+        for j in range(len(chk_in)):
+            chk_in[j].setChecked(False)
 
 
-def chk_out_stateChanged():
-    # Select all outputs checkbox
+def chk_out_state_changed():
+    """ Select all outputs checkbox """
     if chk_out_SelectAll.isChecked():
-        for i in range(len(chk_out)):
-            chk_out[i].setChecked(True)
+        for j in range(len(chk_out)):
+            chk_out[j].setChecked(True)
     else:
-        for i in range(len(chk_out)):
-            chk_out[i].setChecked(False)
+        for j in range(len(chk_out)):
+            chk_out[j].setChecked(False)
 
 
 if __name__ == "__main__":
@@ -245,7 +249,7 @@ if __name__ == "__main__":
     cbx_vf.addItem('Matching')
     cbx_vf.addItem('OCR')
     cbx_vf.addItem('Measurement')
-    cbx_vf.currentIndexChanged.connect(cbx_currentIndexChanged)
+    cbx_vf.currentIndexChanged.connect(cbx_curr_idx_changed)
 
     txt_vf = QLineEdit()
     txt_vf.setText('VfCodeReader')
@@ -265,7 +269,7 @@ if __name__ == "__main__":
     label_in.setFont(font_bold)
 
     chk_in_SelectAll = QCheckBox('Select all')
-    chk_in_SelectAll.stateChanged.connect(chk_in_stateChanged)
+    chk_in_SelectAll.stateChanged.connect(chk_in_state_changed)
 
     chk_in = [  QCheckBox('Enable'),
                 QCheckBox('NumSearchMax'),
@@ -299,7 +303,7 @@ if __name__ == "__main__":
     label_out.setFont(font_bold)
 
     chk_out_SelectAll = QCheckBox('Select all')
-    chk_out_SelectAll.stateChanged.connect(chk_out_stateChanged)
+    chk_out_SelectAll.stateChanged.connect(chk_out_state_changed)
 
     chk_out = [ QCheckBox('NumResults'),
                 QCheckBox('DecodedData'),
@@ -339,15 +343,15 @@ if __name__ == "__main__":
 
     # Footer widgets
     btn_gen_file = QPushButton('Generate file')
-    btn_gen_file.clicked.connect(btn_genFile)
-    
+    btn_gen_file.clicked.connect(btn_gen_file)
+
     box_fin = QMessageBox()
     box_fin.setWindowTitle('Finished')
     box_fin.setText('Successfully finished.')
     box_fin.setVisible(False)
 
     # Layout settings
-    layout = QFormLayout() 
+    layout = QFormLayout()
     layout.addRow(label_header)
     layout.addRow(QLabel('__________________________________________________________________________________'))
     layout.addRow(QLabel('Select your Vision function: '), cbx_vf)
@@ -365,12 +369,12 @@ if __name__ == "__main__":
     vbox_in.addWidget(label_in)
     vbox_in.addWidget(chk_in_SelectAll)
     vbox_in.addWidget(QLabel('=============================='))
-    for i in range(len(chk_in)): 
-        vbox_in.addWidget(chk_in[i]) 
+    for i in range(len(chk_in)):
+        vbox_in.addWidget(chk_in[i])
     vbox_in.addStretch()
 
     vbox_out = QVBoxLayout()
-    vbox_out.addWidget(label_out)    
+    vbox_out.addWidget(label_out)
     vbox_out.addWidget(chk_out_SelectAll)
     vbox_out.addWidget(QLabel('=============================='))
     for i in range(len(chk_out)):
@@ -381,10 +385,9 @@ if __name__ == "__main__":
     hbox.addLayout(vbox_in)
     hbox.addLayout(vbox_out)
     layout.addRow(hbox)
-    
+
     layout.addRow(QLabel('__________________________________________________________________________________'))
     layout.addRow(btn_gen_file)
-    
 
     # Set initial visibility
     chk_comp.setChecked(True)
