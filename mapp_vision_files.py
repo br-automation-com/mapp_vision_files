@@ -5,7 +5,7 @@ import os
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QLineEdit, QCheckBox, QPushButton, QMessageBox, QFormLayout, QVBoxLayout, QHBoxLayout, QFileDialog
 from PyQt5.QtGui import QFont
 
-def btn_gen_file():
+def btn_gen_file_pushed():
     """ Generate files button pressed """
     # Copy VF index-related settings
     if cbx_vf.currentIndex() == 0:
@@ -160,7 +160,7 @@ def cbx_curr_idx_changed(idx):
                 chk_out[j].setVisible(True)
             else:
                 chk_out[j].setVisible(False)
-    if idx == 1:
+    elif idx == 1:
         # Blob
         txt_vf.setText('VfBlob')
         for j in range(len(chk_in)):
@@ -173,7 +173,7 @@ def cbx_curr_idx_changed(idx):
                 chk_out[j].setVisible(True)
             else:
                 chk_out[j].setVisible(False)
-    if idx == 2:
+    elif idx == 2:
         # Matching
         txt_vf.setText('VfMatching')
         for j in range(len(chk_in)):
@@ -186,7 +186,7 @@ def cbx_curr_idx_changed(idx):
                 chk_out[j].setVisible(True)
             else:
                 chk_out[j].setVisible(False)
-    if idx == 3:
+    elif idx == 3:
         # OCR
         txt_vf.setText('VfOcr')
         for j in range(len(chk_in)):
@@ -199,7 +199,7 @@ def cbx_curr_idx_changed(idx):
                 chk_out[j].setVisible(True)
             else:
                 chk_out[j].setVisible(False)
-    if idx == 4:
+    else:
         # Measurement
         txt_vf.setText('VfMeasurement')
         for j in range(len(chk_in)):
@@ -212,6 +212,7 @@ def cbx_curr_idx_changed(idx):
                 chk_out[j].setVisible(True)
             else:
                 chk_out[j].setVisible(False)
+    widget.setFixedSize(layout.sizeHint())
 
 
 def chk_in_state_changed():
@@ -256,13 +257,6 @@ if __name__ == "__main__":
 
     chk_comp = QCheckBox('Generate .visioncomponent file')
     chk_include = QCheckBox('Include files to AS project')
-
-    # txt_dir = QLineEdit()
-    # dir_name = os.getcwd()
-    # txt_dir.setPlaceholderText(dir_name)
-    # btn_dir = QPushButton('...')
-    # btn_dir.setFixedWidth(25)
-    # btn_dir.clicked.connect(btn_getDir)
 
     # Input widgets
     label_in = QLabel('Inputs')
@@ -343,7 +337,7 @@ if __name__ == "__main__":
 
     # Footer widgets
     btn_gen_file = QPushButton('Generate file')
-    btn_gen_file.clicked.connect(btn_gen_file)
+    btn_gen_file.clicked.connect(btn_gen_file_pushed)
 
     box_fin = QMessageBox()
     box_fin.setWindowTitle('Finished')
@@ -356,11 +350,6 @@ if __name__ == "__main__":
     layout.addRow(QLabel('__________________________________________________________________________________'))
     layout.addRow(QLabel('Select your Vision function: '), cbx_vf)
     layout.addRow(QLabel('Instance name: '), txt_vf)
-    # hbox_header = QHBoxLayout()
-    # hbox_header.addWidget(QLabel('Save to: '))
-    # hbox_header.addWidget(txt_dir)
-    # hbox_header.addWidget(btn_dir)
-    # layout.addRow(hbox_header)
     layout.addRow(QLabel('          '), chk_comp)
     layout.addRow(QLabel('          '), chk_include)
     layout.addRow(QLabel('__________________________________________________________________________________'))
@@ -393,7 +382,6 @@ if __name__ == "__main__":
     chk_comp.setChecked(True)
     chk_include.setChecked(True)
     chk_in_SelectAll.setChecked(True)
-    # chk_out_SelectAll.setChecked(True)
     for i in range(len(chk_in)):
         if mp_in_cr[i] == 0:
             chk_in[i].setVisible(False)
@@ -403,7 +391,7 @@ if __name__ == "__main__":
 
     # Set widget and run
     widget = QWidget()
-    widget.move(100, 100)
+    widget.move(500, 200)
     widget.setLayout(layout)
     widget.show()
     widget.setWindowTitle('Mapp Vision Files')
