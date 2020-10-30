@@ -4,6 +4,28 @@ from PyQt5.QtGui import *
 
 def btn_genFile():
 
+    # Copy VF index-related settings
+    if cbx_vf.currentIndex() == 0:
+        vf_string = 'vf-datacode'
+        mp_in = mp_in_cr
+        mp_out = mp_out_cr
+    elif cbx_vf.currentIndex() == 1:
+        vf_string = 'vf-blob'
+        mp_in = mp_in_blob
+        mp_out = mp_out_blob
+    elif cbx_vf.currentIndex() == 2:
+        vf_string = 'vf-matching'
+        mp_in = mp_in_match
+        mp_out = mp_out_match
+    elif cbx_vf.currentIndex() == 3:
+        vf_string = 'vf-ocr'
+        mp_in = mp_in_ocr
+        mp_out = mp_out_ocr
+    else:
+        vf_string = 'vf-measurement'
+        mp_in = mp_in_meas
+        mp_out = mp_out_meas
+
     # Create the Vision Component file
     file_types = 'Vision Application (*.visionapplication);;'
     path = QFileDialog.getSaveFileName(filter = file_types)
@@ -11,58 +33,22 @@ def btn_genFile():
     f_handle = open(path[0], 'w+')
 
     # Header
-    f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Configuration>\n\t<Element ID=\"')
-    f_handle.write(f_name)
-    f_handle.write('\" Type=\"visionapplication\">\n')
+    f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Configuration>\n\t<Element ID=\"' + f_name + '\" Type=\"visionapplication\">\n')
     f_handle.write('\t\t<Group ID=\"ImgProcessingInputs\">\n')
-    
-    if cbx_vf.currentIndex() == 0:
-        mp_in = mp_in_cr
-        mp_out = mp_out_cr
-    elif cbx_vf.currentIndex() == 1:
-        mp_in = mp_in_blob
-        mp_out = mp_out_blob
-    elif cbx_vf.currentIndex() == 2:
-        mp_in = mp_in_match
-        mp_out = mp_out_match
-    elif cbx_vf.currentIndex() == 3:
-        mp_in = mp_in_ocr
-        mp_out = mp_out_ocr
-    else:
-        mp_in = mp_in_meas
-        mp_out = mp_out_meas
-
     k = 0
     for j in range(len(mp_in)):
         if mp_in[j] & chk_in[j].isChecked():
-            f_handle.write('\t\t\t<Group ID="Input[')
-            f_handle.write(str(k))        
-            f_handle.write(']\">\n')
-            f_handle.write('\t\t\t\t<Property ID=\"ChannelID\" Value=\"')
-            f_handle.write(chk_in[j].text())
-            f_handle.write('\" />\n')
+            f_handle.write('\t\t\t<Group ID="Input[' + str(k) + ']\">\n')
+            f_handle.write('\t\t\t\t<Property ID=\"ChannelID\" Value=\"' + chk_in[j].text() + '\" />\n')
             f_handle.write('\t\t\t</Group>\n')
             k = k + 1
     f_handle.write('\t\t</Group>\n')
     f_handle.write('\t\t<Group ID=\"ImgProcessingVariables\" />\n')
     f_handle.write('\t\t<Group ID=\"VisionFunctionSet\">\n')
     f_handle.write('\t\t\t<Group ID=\"VfInstance[1]\">\n')
-    f_handle.write('\t\t\t\t<Property ID=\"VfName\" Value=\"')
-    f_handle.write(txt_vf.text())
-    f_handle.write('\" />\n')
+    f_handle.write('\t\t\t\t<Property ID=\"VfName\" Value=\"' + txt_vf.text() + '\" />\n')
     f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />\n')
-    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"')
-    if cbx_vf.currentIndex() == 0:
-        f_handle.write('vf-datacode')
-    elif cbx_vf.currentIndex() == 1:
-        f_handle.write('vf-blob')
-    elif cbx_vf.currentIndex() == 2:
-        f_handle.write('vf-matching')
-    elif cbx_vf.currentIndex() == 3:
-        f_handle.write('vf-ocr')
-    else:
-        f_handle.write('vf-measurement')
-    f_handle.write('\">\n')
+    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"' + vf_string + '\">\n')
     f_handle.write('\t\t\t\t\t<Group ID=\"VfConstants\">\n')
     f_handle.write('\t\t\t\t\t\t<Property ID=\"MaxStringSize\" Value=\"254\" />\n')
     f_handle.write('\t\t\t\t\t\t<Property ID=\"NumResultsMax\" Value=\"1\" />\n')
@@ -70,24 +56,19 @@ def btn_genFile():
     f_handle.write('\t\t\t\t\t<Group ID=\"VfWirings\">\n')
 
     # Inputs
-    tab_6 = '\t\t\t\t\t\t'
-    f_handle.write(tab_6 + '<Group ID=\"Image\">\n')
-    f_handle.write(tab_6 + '\t<Selector ID=\"SourceType\" Value=\"ImageAcquisition\">\n')
-    f_handle.write(tab_6 + '\t\t<Property ID=\"IaParameter\" Value=\"Image01\" />\n')
-    f_handle.write(tab_6 + '\t</Selector>\n')
-    f_handle.write(tab_6 + '</Group>\n')
+    f_handle.write('\t\t\t\t\t\t<Group ID=\"Image\">\n')
+    f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"ImageAcquisition\">\n')
+    f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IaParameter\" Value=\"Image01\" />\n')
+    f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
+    f_handle.write('\t\t\t\t\t\t</Group>\n')
     k = 0
     for j in range(len(mp_in)):
         if mp_in[j] & chk_in[j].isChecked():
-            f_handle.write(tab_6 + '<Group ID=\"')
-            f_handle.write(chk_in[j].text())
-            f_handle.write('\">\n')
-            f_handle.write(tab_6 + '\t<Selector ID=\"SourceType\" Value=\"Input\">\n')
-            f_handle.write(tab_6 + '\t\t<Property ID=\"IoParameter\" Value=\"')
-            f_handle.write(chk_in[j].text())
-            f_handle.write('\" />\n')
-            f_handle.write(tab_6 + '\t</Selector>\n')
-            f_handle.write(tab_6 + '</Group>\n')
+            f_handle.write('\t\t\t\t\t\t<Group ID=\"' + chk_in[j].text() + '\">\n')
+            f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"Input\">\n')
+            f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IoParameter\" Value=\"' + chk_in[j].text() + '\" />\n')
+            f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
+            f_handle.write('\t\t\t\t\t\t</Group>\n')
             k = k + 1
     f_handle.write('\t\t\t\t\t</Group>\n')
     f_handle.write('\t\t\t\t</Selector>\n')
@@ -103,21 +84,15 @@ def btn_genFile():
     k = 0
     for j in range(len(mp_out)):
         if mp_out[j] & chk_out[j].isChecked():
-            f_handle.write('\t\t\t<Group ID=\"Output[')
-            f_handle.write(str(k))        
-            f_handle.write(']\">\n')
-            f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"')
-            f_handle.write(chk_out[j].text())
+            f_handle.write('\t\t\t<Group ID=\"Output[' + str(k) + ']\">\n')
+            f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"' + chk_out[j].text())
+            # SymbolType - the same name for input and output - prevent AS error
             if j == 2:
                 f_handle.write('Out')
             f_handle.write('\" />\n')
             f_handle.write('\t\t\t\t<Group ID=\"VpOutputWire\">\n')
-            f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"')
-            f_handle.write(txt_vf.text())
-            f_handle.write('\" />\n')
-            f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"')
-            f_handle.write(chk_out[j].text())
-            f_handle.write('\" />\n')
+            f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"' + txt_vf.text() + '\" />\n')
+            f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"' + chk_out[j].text() + '\" />\n')
             f_handle.write('\t\t\t\t</Group>\n')
             f_handle.write('\t\t\t</Group>\n')
             k = k + 1   
@@ -127,39 +102,36 @@ def btn_genFile():
     f_handle.close()
 
     # Create the Vision Component file
-    file_types = 'Vision Component (*.visioncomponent);;'
-    path = QFileDialog.getSaveFileName(filter = file_types)
-    f_name_comp = os.path.splitext(os.path.basename(path[0]))[0]
-    f_handle = open(path[0], 'w+')
-    f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
-    f_handle.write('<Configuration>\n')
-    f_handle.write('\t<Element ID=\"' + f_name_comp + '\" Type=\"visioncomponent\">\n')
-    f_handle.write('\t\t<Property ID=\"VisionApplicationReference\" Value=\"' + f_name + '\" />\n')
-    f_handle.write('\t</Element>\n')
-    f_handle.write('</Configuration>\n')
-    # <?xml version="1.0" encoding="utf-8"?>
-    # <Configuration>
-    #     <Element ID="MatchComp" Type="visioncomponent">
-    #         <Property ID="VisionApplicationReference" Value="BlobApp" />
-    #     </Element>
-    # </Configuration>
-    f_handle.close()
+    if chk_comp.isChecked():
+        file_types = 'Vision Component (*.visioncomponent);;'
+        path = QFileDialog.getSaveFileName(filter = file_types)
+        f_name_comp = os.path.splitext(os.path.basename(path[0]))[0]
+        f_handle = open(path[0], 'w+')
+        f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
+        f_handle.write('<Configuration>\n')
+        f_handle.write('\t<Element ID=\"' + f_name_comp + '\" Type=\"visioncomponent\">\n')
+        f_handle.write('\t\t<Property ID=\"VisionApplicationReference\" Value=\"' + f_name + '\" />\n')
+        f_handle.write('\t</Element>\n')
+        f_handle.write('</Configuration>\n')
+        f_handle.close()
 
-    # Change the Package.pkg file 
-    f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
-    f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
-    f_line = f_handle.readline()
-    while f_line.find('</Objects>') == -1:
-        f_handle_copy.write(f_line)
+    # Change the Package.pkg file
+    if chk_include.isChecked():
+        f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
+        f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
         f_line = f_handle.readline()
-    f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
-    f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
-    f_handle_copy.write('  </Objects>\n')
-    f_handle_copy.write('</Package>')
-    f_handle.close()
-    f_handle_copy.close()
-    os.remove(os.path.dirname(path[0]) + '/Package.pkg')
-    os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
+        while f_line.find('</Objects>') == -1:
+            f_handle_copy.write(f_line)
+            f_line = f_handle.readline()
+        if chk_comp.isChecked():
+            f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
+        f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
+        f_handle_copy.write('  </Objects>\n')
+        f_handle_copy.write('</Package>')
+        f_handle.close()
+        f_handle_copy.close()
+        os.remove(os.path.dirname(path[0]) + '/Package.pkg')
+        os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
 
 def cbx_currentIndexChanged(idx):
     if idx == 0:
@@ -250,6 +222,11 @@ if __name__ == "__main__":
     app = QApplication([])
 
     # Header widgets
+    font_bold = QFont()
+    font_bold.setBold(True)
+    label_header = QLabel('This app generates mappVision configuration files')
+    label_header.setFont(font_bold)
+
     cbx_vf = QComboBox()
     cbx_vf.addItem('Code Reader')
     cbx_vf.addItem('Model-based Blob')
@@ -261,6 +238,9 @@ if __name__ == "__main__":
     txt_vf = QLineEdit()
     txt_vf.setText('VfCodeReader')
 
+    chk_comp = QCheckBox('Generate .visioncomponent file')
+    chk_include = QCheckBox('Include files to AS project')
+
     # txt_dir = QLineEdit()
     # dir_name = os.getcwd()
     # txt_dir.setPlaceholderText(dir_name)
@@ -269,8 +249,6 @@ if __name__ == "__main__":
     # btn_dir.clicked.connect(btn_getDir)
 
     # Input widgets
-    font_bold = QFont()
-    font_bold.setBold(True)
     label_in = QLabel('Inputs')
     label_in.setFont(font_bold)
 
@@ -313,7 +291,7 @@ if __name__ == "__main__":
 
     chk_out = [ QCheckBox('NumResults'),
                 QCheckBox('DecodedData'),
-                QCheckBox('SymbolType'), # BUG
+                QCheckBox('SymbolType'),
                 QCheckBox('OCRData'),
                 QCheckBox('GradingValue'),
                 QCheckBox('Clipped'),
@@ -348,12 +326,14 @@ if __name__ == "__main__":
     mp_out_meas = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     
-    # Header widgets
+    # Footer widgets
     btn_gen_file = QPushButton('Generate file')
     btn_gen_file.clicked.connect(btn_genFile)
 
     # Layout settings
     layout = QFormLayout() 
+    layout.addRow(label_header)
+    layout.addRow(QLabel('__________________________________________________________________________________'))
     layout.addRow(QLabel('Select your Vision function: '), cbx_vf)
     layout.addRow(QLabel('Instance name: '), txt_vf)
     # hbox_header = QHBoxLayout()
@@ -361,6 +341,8 @@ if __name__ == "__main__":
     # hbox_header.addWidget(txt_dir)
     # hbox_header.addWidget(btn_dir)
     # layout.addRow(hbox_header)
+    layout.addRow(QLabel('          '), chk_comp)
+    layout.addRow(QLabel('          '), chk_include)
     layout.addRow(QLabel('__________________________________________________________________________________'))
 
     vbox_in = QVBoxLayout()
@@ -389,7 +371,10 @@ if __name__ == "__main__":
     
 
     # Set initial visibility
+    chk_comp.setChecked(True)
+    chk_include.setChecked(True)
     chk_in_SelectAll.setChecked(True)
+    chk_out_SelectAll.setChecked(True)
     for i in range(len(chk_in)):
         if mp_in_cr[i] == 0:
             chk_in[i].setVisible(False)
