@@ -49,7 +49,18 @@ def btn_genFile():
     f_handle.write(txt_vf.text())
     f_handle.write('\" />\n')
     f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />\n')
-    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"vf-datacode\">\n')
+    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"')
+    if cbx_vf.currentIndex() == 0:
+        f_handle.write('vf-datacode')
+    elif cbx_vf.currentIndex() == 1:
+        f_handle.write('vf-blob')
+    elif cbx_vf.currentIndex() == 2:
+        f_handle.write('vf-matching')
+    elif cbx_vf.currentIndex() == 3:
+        f_handle.write('vf-ocr')
+    else:
+        f_handle.write('vf-measurement')
+    f_handle.write('\">\n')
     f_handle.write('\t\t\t\t\t<Group ID=\"VfConstants\">\n')
     f_handle.write('\t\t\t\t\t\t<Property ID=\"MaxStringSize\" Value=\"254\" />\n')
     f_handle.write('\t\t\t\t\t\t<Property ID=\"NumResultsMax\" Value=\"1\" />\n')
@@ -112,6 +123,22 @@ def btn_genFile():
     f_handle.write('\t</Element>\n')
     f_handle.write('</Configuration>\n')
     f_handle.close()
+
+    # Add new file to the Package.pkg file 
+    f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
+    f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
+    f_line = f_handle.readline()
+    while f_line.find('</Objects>') == -1:
+        f_handle_copy.write(f_line)
+        f_line = f_handle.readline()
+    f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
+    f_handle_copy.write('  </Objects>\n')
+    f_handle_copy.write('</Package>')
+    f_handle.close()
+    f_handle_copy.close()
+
+    os.remove(os.path.dirname(path[0]) + '/Package.pkg')
+    os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
 
 def cbx_currentIndexChanged(idx):
     if idx == 0:
