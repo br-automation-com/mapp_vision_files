@@ -342,6 +342,7 @@ if __name__ == "__main__":
     btn_gen_file.clicked.connect(btn_genFile)
     
     box_fin = QMessageBox()
+    box_fin.setWindowTitle('Finished')
     box_fin.setText('Successfully finished.')
     box_fin.setVisible(False)
 
@@ -399,6 +400,8 @@ if __name__ == "__main__":
 
     # Set widget and run
     widget = QWidget()
+    widget.move(100, 100)
     widget.setLayout(layout)
     widget.show()
+    widget.setWindowTitle('Mapp Vision Files')
     sys.exit(app.exec_())
