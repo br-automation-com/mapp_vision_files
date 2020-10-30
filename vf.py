@@ -29,109 +29,115 @@ def btn_genFile():
     # Create the Vision Component file
     file_types = 'Vision Application (*.visionapplication);;'
     path = QFileDialog.getSaveFileName(filter = file_types)
-    f_name = os.path.splitext(os.path.basename(path[0]))[0]
-    f_handle = open(path[0], 'w+')
+    if len(path[0]) > 0:
+        f_name = os.path.splitext(os.path.basename(path[0]))[0]
+        f_handle = open(path[0], 'w+')
 
-    # Header
-    f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Configuration>\n\t<Element ID=\"' + f_name + '\" Type=\"visionapplication\">\n')
-    f_handle.write('\t\t<Group ID=\"ImgProcessingInputs\">\n')
-    k = 0
-    for j in range(len(mp_in)):
-        if mp_in[j] & chk_in[j].isChecked():
-            f_handle.write('\t\t\t<Group ID="Input[' + str(k) + ']\">\n')
-            f_handle.write('\t\t\t\t<Property ID=\"ChannelID\" Value=\"' + chk_in[j].text() + '\" />\n')
-            f_handle.write('\t\t\t</Group>\n')
-            k = k + 1
-    f_handle.write('\t\t</Group>\n')
-    f_handle.write('\t\t<Group ID=\"ImgProcessingVariables\" />\n')
-    f_handle.write('\t\t<Group ID=\"VisionFunctionSet\">\n')
-    f_handle.write('\t\t\t<Group ID=\"VfInstance[1]\">\n')
-    f_handle.write('\t\t\t\t<Property ID=\"VfName\" Value=\"' + txt_vf.text() + '\" />\n')
-    f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />\n')
-    f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"' + vf_string + '\">\n')
-    f_handle.write('\t\t\t\t\t<Group ID=\"VfConstants\">\n')
-    f_handle.write('\t\t\t\t\t\t<Property ID=\"MaxStringSize\" Value=\"254\" />\n')
-    f_handle.write('\t\t\t\t\t\t<Property ID=\"NumResultsMax\" Value=\"1\" />\n')
-    f_handle.write('\t\t\t\t\t</Group>\n')
-    f_handle.write('\t\t\t\t\t<Group ID=\"VfWirings\">\n')
+        # Header
+        f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Configuration>\n\t<Element ID=\"' + f_name + '\" Type=\"visionapplication\">\n')
+        f_handle.write('\t\t<Group ID=\"ImgProcessingInputs\">\n')
+        k = 0
+        for j in range(len(mp_in)):
+            if mp_in[j] & chk_in[j].isChecked():
+                f_handle.write('\t\t\t<Group ID="Input[' + str(k) + ']\">\n')
+                f_handle.write('\t\t\t\t<Property ID=\"ChannelID\" Value=\"' + chk_in[j].text() + '\" />\n')
+                f_handle.write('\t\t\t</Group>\n')
+                k = k + 1
+        f_handle.write('\t\t</Group>\n')
+        f_handle.write('\t\t<Group ID=\"ImgProcessingVariables\" />\n')
+        f_handle.write('\t\t<Group ID=\"VisionFunctionSet\">\n')
+        f_handle.write('\t\t\t<Group ID=\"VfInstance[1]\">\n')
+        f_handle.write('\t\t\t\t<Property ID=\"VfName\" Value=\"' + txt_vf.text() + '\" />\n')
+        f_handle.write('\t\t\t\t<Property ID=\"VfExecutionNr\" Value=\"1\" />\n')
+        f_handle.write('\t\t\t\t<Selector ID=\"VfType\" Value=\"' + vf_string + '\">\n')
+        f_handle.write('\t\t\t\t\t<Group ID=\"VfConstants\">\n')
+        f_handle.write('\t\t\t\t\t\t<Property ID=\"MaxStringSize\" Value=\"254\" />\n')
+        f_handle.write('\t\t\t\t\t\t<Property ID=\"NumResultsMax\" Value=\"1\" />\n')
+        f_handle.write('\t\t\t\t\t</Group>\n')
+        f_handle.write('\t\t\t\t\t<Group ID=\"VfWirings\">\n')
 
-    # Inputs
-    f_handle.write('\t\t\t\t\t\t<Group ID=\"Image\">\n')
-    f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"ImageAcquisition\">\n')
-    f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IaParameter\" Value=\"Image01\" />\n')
-    f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
-    f_handle.write('\t\t\t\t\t\t</Group>\n')
-    k = 0
-    for j in range(len(mp_in)):
-        if mp_in[j] & chk_in[j].isChecked():
-            f_handle.write('\t\t\t\t\t\t<Group ID=\"' + chk_in[j].text() + '\">\n')
-            f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"Input\">\n')
-            f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IoParameter\" Value=\"' + chk_in[j].text() + '\" />\n')
-            f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
-            f_handle.write('\t\t\t\t\t\t</Group>\n')
-            k = k + 1
-    f_handle.write('\t\t\t\t\t</Group>\n')
-    f_handle.write('\t\t\t\t</Selector>\n')
-    f_handle.write('\t\t\t\t<Group ID=\"Position\">\n')
-    f_handle.write('\t\t\t\t\t<Property ID=\"X\" Value=\"1\" />\n')
-    f_handle.write('\t\t\t\t\t<Property ID=\"Y\" Value=\"0\" />\n')
-    f_handle.write('\t\t\t\t</Group>\n')
-    f_handle.write('\t\t\t</Group>\n')
-    f_handle.write('\t\t</Group>\n')
+        # Inputs
+        f_handle.write('\t\t\t\t\t\t<Group ID=\"Image\">\n')
+        f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"ImageAcquisition\">\n')
+        f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IaParameter\" Value=\"Image01\" />\n')
+        f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
+        f_handle.write('\t\t\t\t\t\t</Group>\n')
+        k = 0
+        for j in range(len(mp_in)):
+            if mp_in[j] & chk_in[j].isChecked():
+                f_handle.write('\t\t\t\t\t\t<Group ID=\"' + chk_in[j].text() + '\">\n')
+                f_handle.write('\t\t\t\t\t\t\t<Selector ID=\"SourceType\" Value=\"Input\">\n')
+                f_handle.write('\t\t\t\t\t\t\t\t<Property ID=\"IoParameter\" Value=\"' + chk_in[j].text() + '\" />\n')
+                f_handle.write('\t\t\t\t\t\t\t</Selector>\n')
+                f_handle.write('\t\t\t\t\t\t</Group>\n')
+                k = k + 1
+        f_handle.write('\t\t\t\t\t</Group>\n')
+        f_handle.write('\t\t\t\t</Selector>\n')
+        f_handle.write('\t\t\t\t<Group ID=\"Position\">\n')
+        f_handle.write('\t\t\t\t\t<Property ID=\"X\" Value=\"1\" />\n')
+        f_handle.write('\t\t\t\t\t<Property ID=\"Y\" Value=\"0\" />\n')
+        f_handle.write('\t\t\t\t</Group>\n')
+        f_handle.write('\t\t\t</Group>\n')
+        f_handle.write('\t\t</Group>\n')
 
-    # Outputs
-    f_handle.write('\t\t<Group ID=\"ImgProcessingOutputs\">\n')
-    k = 0
-    for j in range(len(mp_out)):
-        if mp_out[j] & chk_out[j].isChecked():
-            f_handle.write('\t\t\t<Group ID=\"Output[' + str(k) + ']\">\n')
-            f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"' + chk_out[j].text())
-            # SymbolType - the same name for input and output - prevent AS error
-            if j == 2:
-                f_handle.write('Out')
-            f_handle.write('\" />\n')
-            f_handle.write('\t\t\t\t<Group ID=\"VpOutputWire\">\n')
-            f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"' + txt_vf.text() + '\" />\n')
-            f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"' + chk_out[j].text() + '\" />\n')
-            f_handle.write('\t\t\t\t</Group>\n')
-            f_handle.write('\t\t\t</Group>\n')
-            k = k + 1   
-    f_handle.write('\t\t</Group>\n')
-    f_handle.write('\t</Element>\n')
-    f_handle.write('</Configuration>\n')
-    f_handle.close()
+        # Outputs
+        f_handle.write('\t\t<Group ID=\"ImgProcessingOutputs\">\n')
+        k = 0
+        for j in range(len(mp_out)):
+            if mp_out[j] & chk_out[j].isChecked():
+                f_handle.write('\t\t\t<Group ID=\"Output[' + str(k) + ']\">\n')
+                f_handle.write('\t\t\t\t<Property ID="ChannelID" Value=\"' + chk_out[j].text())
+                # SymbolType - the same name for input and output - prevent AS error
+                if j == 2:
+                    f_handle.write('Out')
+                f_handle.write('\" />\n')
+                f_handle.write('\t\t\t\t<Group ID=\"VpOutputWire\">\n')
+                f_handle.write('\t\t\t\t\t<Property ID=\"SourceVfName\" Value=\"' + txt_vf.text() + '\" />\n')
+                f_handle.write('\t\t\t\t\t<Property ID=\"VfOutputParameter\" Value=\"' + chk_out[j].text() + '\" />\n')
+                f_handle.write('\t\t\t\t</Group>\n')
+                f_handle.write('\t\t\t</Group>\n')
+                k = k + 1   
+        f_handle.write('\t\t</Group>\n')
+        f_handle.write('\t</Element>\n')
+        f_handle.write('</Configuration>\n')
+        f_handle.close()
 
     # Create the Vision Component file
     if chk_comp.isChecked():
         file_types = 'Vision Component (*.visioncomponent);;'
         path = QFileDialog.getSaveFileName(filter = file_types)
-        f_name_comp = os.path.splitext(os.path.basename(path[0]))[0]
-        f_handle = open(path[0], 'w+')
-        f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
-        f_handle.write('<Configuration>\n')
-        f_handle.write('\t<Element ID=\"' + f_name_comp + '\" Type=\"visioncomponent\">\n')
-        f_handle.write('\t\t<Property ID=\"VisionApplicationReference\" Value=\"' + f_name + '\" />\n')
-        f_handle.write('\t</Element>\n')
-        f_handle.write('</Configuration>\n')
-        f_handle.close()
+        if len(path[0]) > 0:
+            f_name_comp = os.path.splitext(os.path.basename(path[0]))[0]
+            f_handle = open(path[0], 'w+')
+            f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
+            f_handle.write('<Configuration>\n')
+            f_handle.write('\t<Element ID=\"' + f_name_comp + '\" Type=\"visioncomponent\">\n')
+            f_handle.write('\t\t<Property ID=\"VisionApplicationReference\" Value=\"' + f_name + '\" />\n')
+            f_handle.write('\t</Element>\n')
+            f_handle.write('</Configuration>\n')
+            f_handle.close()
 
     # Change the Package.pkg file
     if chk_include.isChecked():
-        f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
-        f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
-        f_line = f_handle.readline()
-        while f_line.find('</Objects>') == -1:
-            f_handle_copy.write(f_line)
+        if os.path.exists(os.path.dirname(path[0]) + '/Package.pkg'):
+            f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
+            f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
             f_line = f_handle.readline()
-        if chk_comp.isChecked():
-            f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
-        f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
-        f_handle_copy.write('  </Objects>\n')
-        f_handle_copy.write('</Package>')
-        f_handle.close()
-        f_handle_copy.close()
-        os.remove(os.path.dirname(path[0]) + '/Package.pkg')
-        os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
+            while f_line.find('</Objects>') == -1:
+                f_handle_copy.write(f_line)
+                f_line = f_handle.readline()
+            if chk_comp.isChecked():
+                f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
+            f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
+            f_handle_copy.write('  </Objects>\n')
+            f_handle_copy.write('</Package>')
+            f_handle.close()
+            f_handle_copy.close()
+            os.remove(os.path.dirname(path[0]) + '/Package.pkg')
+            os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
+
+    box_fin.setVisible(True)
+
 
 def cbx_currentIndexChanged(idx):
     if idx == 0:
@@ -200,7 +206,9 @@ def cbx_currentIndexChanged(idx):
             else:
                 chk_out[i].setVisible(False)  
 
+
 def chk_in_stateChanged():
+    # Select all inputs checkbox
     if chk_in_SelectAll.isChecked():
         for i in range(len(chk_in)):
             chk_in[i].setChecked(True)
@@ -208,7 +216,9 @@ def chk_in_stateChanged():
         for i in range(len(chk_in)):
             chk_in[i].setChecked(False)
 
+
 def chk_out_stateChanged():
+    # Select all outputs checkbox
     if chk_out_SelectAll.isChecked():
         for i in range(len(chk_out)):
             chk_out[i].setChecked(True)
@@ -218,7 +228,6 @@ def chk_out_stateChanged():
 
 
 if __name__ == "__main__":
-
     app = QApplication([])
 
     # Header widgets
@@ -324,11 +333,14 @@ if __name__ == "__main__":
     mp_out_match = [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
     mp_out_ocr = [1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     mp_out_meas = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    
-    
+
     # Footer widgets
     btn_gen_file = QPushButton('Generate file')
     btn_gen_file.clicked.connect(btn_genFile)
+    
+    box_fin = QMessageBox()
+    box_fin.setText('Successfully finished.')
+    box_fin.setVisible(False)
 
     # Layout settings
     layout = QFormLayout() 
