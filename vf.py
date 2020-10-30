@@ -3,17 +3,19 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 def btn_genFile():
-    file_types = 'Vision application (*.visionapplication);;'
+
+    # Create the Vision Component file
+    file_types = 'Vision Application (*.visionapplication);;'
     path = QFileDialog.getSaveFileName(filter = file_types)
     f_name = os.path.splitext(os.path.basename(path[0]))[0]
-
     f_handle = open(path[0], 'w+')
+
+    # Header
     f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Configuration>\n\t<Element ID=\"')
     f_handle.write(f_name)
     f_handle.write('\" Type=\"visionapplication\">\n')
-    
     f_handle.write('\t\t<Group ID=\"ImgProcessingInputs\">\n')
-
+    
     if cbx_vf.currentIndex() == 0:
         mp_in = mp_in_cr
         mp_out = mp_out_cr
@@ -124,19 +126,38 @@ def btn_genFile():
     f_handle.write('</Configuration>\n')
     f_handle.close()
 
-    # Add new file to the Package.pkg file 
+    # Create the Vision Component file
+    file_types = 'Vision Component (*.visioncomponent);;'
+    path = QFileDialog.getSaveFileName(filter = file_types)
+    f_name_comp = os.path.splitext(os.path.basename(path[0]))[0]
+    f_handle = open(path[0], 'w+')
+    f_handle.write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
+    f_handle.write('<Configuration>\n')
+    f_handle.write('\t<Element ID=\"' + f_name_comp + '\" Type=\"visioncomponent\">\n')
+    f_handle.write('\t\t<Property ID=\"VisionApplicationReference\" Value=\"' + f_name + '\" />\n')
+    f_handle.write('\t</Element>\n')
+    f_handle.write('</Configuration>\n')
+    # <?xml version="1.0" encoding="utf-8"?>
+    # <Configuration>
+    #     <Element ID="MatchComp" Type="visioncomponent">
+    #         <Property ID="VisionApplicationReference" Value="BlobApp" />
+    #     </Element>
+    # </Configuration>
+    f_handle.close()
+
+    # Change the Package.pkg file 
     f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
     f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
     f_line = f_handle.readline()
     while f_line.find('</Objects>') == -1:
         f_handle_copy.write(f_line)
         f_line = f_handle.readline()
+    f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
     f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
     f_handle_copy.write('  </Objects>\n')
     f_handle_copy.write('</Package>')
     f_handle.close()
     f_handle_copy.close()
-
     os.remove(os.path.dirname(path[0]) + '/Package.pkg')
     os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
 
