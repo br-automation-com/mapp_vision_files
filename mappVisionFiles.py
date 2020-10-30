@@ -123,9 +123,11 @@ def btn_genFile():
             f_handle = open(os.path.dirname(path[0]) + '/Package.pkg', 'r')
             f_handle_copy = open(os.path.dirname(path[0]) + '/Package.pkg.tmp', 'w+')
             f_line = f_handle.readline()
-            while f_line.find('</Objects>') == -1:
+            while f_line.find('</Objects>') == -1 and f_line.find('<Objects />') == -1:
                 f_handle_copy.write(f_line)
                 f_line = f_handle.readline()
+            if f_line.find('<Objects />') > -1:
+                f_handle_copy.write('  <Objects>\n')
             if chk_comp.isChecked():
                 f_handle_copy.write('    <Object Type=\"File\">' + f_name_comp + '.visioncomponent</Object>\n')
             f_handle_copy.write('    <Object Type=\"File\">' + f_name + '.visionapplication</Object>\n')
@@ -136,8 +138,9 @@ def btn_genFile():
             os.remove(os.path.dirname(path[0]) + '/Package.pkg')
             os.rename(os.path.dirname(path[0]) + '/Package.pkg.tmp', os.path.dirname(path[0]) + '/Package.pkg')
 
+    # Show finished window
     box_fin.setVisible(True)
-
+    widget.activateWindow()
 
 def cbx_currentIndexChanged(idx):
     if idx == 0:
@@ -386,7 +389,7 @@ if __name__ == "__main__":
     chk_comp.setChecked(True)
     chk_include.setChecked(True)
     chk_in_SelectAll.setChecked(True)
-    chk_out_SelectAll.setChecked(True)
+    # chk_out_SelectAll.setChecked(True)
     for i in range(len(chk_in)):
         if mp_in_cr[i] == 0:
             chk_in[i].setVisible(False)
