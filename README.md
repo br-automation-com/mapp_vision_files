@@ -1,6 +1,6 @@
 # mapp_vision_files
 
-I made a simple Python app that generates B&R mapp Vision configuration files (.visionapplication and .visioncomponent). Why? Because I found the process of creating these files manually in the AS a bit annoying - especially configuring the Vision function inputs and outputs. The source code is available at (https://github.com/TomasVostrel/mapp_vision_files) - fell free to use and modify it. I'd be glad for any feedback.
+I made a simple Python app that generates B&R mapp Vision configuration files (.visionapplication and .visioncomponent). Why? Because I found the process of creating these files manually in the AS a bit annoying - especially configuring the Vision function inputs and outputs. The source code is available at (https://github.com/br-automation-com/mapp_vision_files) - fell free to use and modify it. I'd be glad for any feedback.
 
 ## Requirements
 
