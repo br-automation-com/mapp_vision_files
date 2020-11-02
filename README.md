@@ -8,4 +8,5 @@ Requirements:
 - PyQt5 (can be installed with "pip install pyqt5" command)
 	
 Screenshot:
-    ![ALT](screenshot.png)
+
+![ALT](screenshot.png)
