@@ -11,3 +11,9 @@ I made a simple Python app that generates B&R mapp Vision configuration files (.
 ## Screenshot
 
 ![Screenshot](screenshot.png)
+
+## Demonstration video
+
+Click the gif below to go to the full video on YT.
+
+[![Demonstration video](https://j.gifs.com/Gv4Y27.gif)](https://youtu.be/76QC-xXXRDU)
